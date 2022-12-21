@@ -1,0 +1,22 @@
+* {
+    --primary: #6bcb77;
+    --secondary: #4d96ff;
+    --danger: #ff6b6b;
+    --warning: #ffd93d;
+}
+
+.text-primary {
+    color: var(--primary);
+}
+
+.text-secondary {
+    color: var(--secondary);
+}
+
+.text-warning {
+    color: var(--warning);
+}
+
+.text-danger {
+    color: var(--danger);
+}

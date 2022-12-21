@@ -1,0 +1,443 @@
+:root {
+    --primary-color: #671ddf;
+    --col-black: #373747;
+    --col-bg: #ffffff;
+    --col-fg: var(--col-black);
+    --gray-2: #edf2f6;
+    --gray-3: #dbe1e6;
+    --max-contrast: #000000;
+    /* Shadows */
+    --shadow-blue-light: 0px 10px 20px rgba(var(--col-blue-rgb), 0.6);
+    --shadow-blue-dark: 0px 10px 20px rgba(var(--col-blue-rgb), 0.2);
+    --shadow-blue: var(--shadow-blue-light);
+}
+
+::-webkit-scrollbar {
+    width: 0.875rem;
+    border-radius: 1rem;
+}
+
+::-webkit-scrollbar-track {
+    background: #cdcdcd;
+    border-radius: 1rem;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #eaeaee;
+    border-radius: 1rem;
+}
+
+.dark ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+.dark ::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+}
+
+body.dark {
+    --primary-color: #cdcdcd;
+    --col-bg: var(--col-black);
+    --col-fg: #cdcdcd;
+    --gray-2: #434358;
+    --gray-3: #505063;
+    --max-contrast: #ffffff;
+    --shadow-blue: var(--shadow-blue-dark);
+}
+
+* {
+    color: var(--col-fg);
+    box-sizing: border-box;
+    font-family: 'DM Sans', sans-serif;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+blockquote,
+dl,
+figure,
+form,
+ol,
+p,
+pre,
+table,
+ul {
+    margin-bottom: 1rem;
+}
+
+html {
+    font-size: 10px;
+}
+
+body {
+    margin: 0;
+    overflow-x: hidden;
+    background: var(--col-bg);
+    transition: 300ms;
+}
+body.show-aside {
+    --sidebar-width: 239px;
+}
+body.show-aside aside {
+    transform: translateX(0) !important;
+}
+body .dark svg {
+    opacity: 0.7;
+}
+body.dark .light svg {
+    opacity: 0.7;
+}
+body.dark .dark svg {
+    opacity: 1;
+}
+body.dark pre,
+body.dark pre code {
+    border-radius: 5px;
+    opacity: 0.9;
+    background-color: #232635 !important;
+    color: #cecece !important;
+    text-shadow: none !important;
+    border-radius: 0 !important;
+}
+body.dark .token.punctuation {
+    color: #b8b8b8;
+}
+
+header {
+    z-index: 100;
+    background: var(--col-bg);
+    transition: 300ms;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 5.6rem;
+    padding: 0rem 2rem;
+}
+header > h1 {
+    font-size: 3rem;
+    text-align: center;
+    padding: 0.5rem 4rem;
+}
+header button {
+    background: none;
+    border: none;
+    margin-right: 2rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+header button:hover,
+header button:visited {
+    background-color: transparent;
+    border: none;
+    outline: 0;
+}
+header button::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(2, 8, 20, 0.1);
+    transform: scale(0.5);
+    opacity: 0;
+    transition: 100ms;
+    cursor: pointer;
+}
+header button:focus {
+    outline: none;
+}
+header button:hover::before,
+header button:focus::before {
+    opacity: 1;
+    transform: scale(1);
+}
+header div.left {
+    position: fixed;
+    top: 0.425rem;
+    left: 0;
+}
+header nav {
+    display: none;
+}
+header nav a {
+    transition: opacity 300ms;
+    color: var(--col-fg);
+    opacity: 0.5;
+    text-decoration: none;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 2rem;
+}
+header nav a:hover {
+    opacity: 1;
+}
+header nav a.selected {
+    color: var(--max-contrast);
+    opacity: 1;
+}
+
+.logo {
+    text-align: center;
+    padding-top: 2rem;
+}
+.logo > a {
+    display: inline-block;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: var(--col-fg);
+}
+
+.logo > a {
+    display: flex;
+    align-items: center;
+}
+.logo > a > img {
+    margin-right: 0.5rem;
+}
+
+main {
+    font-size: 1.6rem;
+}
+main div.body {
+    grid-column: 2;
+    padding: 2rem 2rem;
+    max-width: 100%;
+}
+main div.body img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+}
+main h1.title {
+    font-size: 6rem;
+    font-weight: 700;
+    letter-spacing: -3px;
+    margin: 3rem 0;
+    line-height: 0.8;
+}
+main p.description {
+    font-size: 1.92rem;
+    color: #abb2bf;
+    font-weight: lighter;
+}
+main h1,
+main h2,
+main h3 {
+    color: var(--max-contrast);
+    font-weight: 400;
+}
+main a {
+    color: #1e90ff;
+}
+main a.next-link {
+    display: block;
+    padding: 10px 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-decoration: none;
+    max-width: calc(50% - 20px);
+}
+main a.next-link span {
+    display: block;
+}
+main a.next-link span.l {
+    color: #1e90ff;
+    text-decoration: underline;
+}
+main div.links {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-flow: row wrap;
+}
+main * {
+    line-height: 1.425;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.w400 {
+    font-weight: 400;
+}
+
+.w600 {
+    font-weight: 600;
+}
+
+.w700 {
+    font-weight: 700;
+}
+
+.m-0 {
+    margin: 0;
+}
+
+.loading,
+.blur {
+    position: relative;
+}
+
+.loading::before {
+    content: 'Waiting...';
+    position: absolute;
+    top: 20%;
+    text-align: center;
+    width: 100%;
+    font-weight: 600;
+    font-size: 1.6rem;
+    z-index: 1;
+    opacity: 0.8;
+}
+
+.blur::after,
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: var(--col-bg);
+    opacity: 0.6;
+}
+
+.blur > fieldset,
+.loading > fieldset {
+    filter: blur(3px);
+}
+
+.header {
+    text-align: center;
+}
+
+.header .img {
+    height: 10rem;
+    margin-bottom: 2rem;
+    fill: #9b4dca;
+}
+
+.wallet-connect {
+    padding: 1.5rem 1.875rem 1rem;
+    background: rgb(245, 242, 240);
+    text-align: center;
+    border-radius: 0.875rem;
+}
+
+.wallet-connect h3 {
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.wallet-connect .walllets {
+    text-align: left;
+}
+
+.wallet-connect .walllets label {
+    font-weight: normal;
+}
+
+.wallet-connect .walllets label.active {
+    font-weight: 600;
+    color: var(--max-contrast);
+}
+
+.wallet-connect .walllets input {
+    margin: 0;
+}
+
+.wallet-connect .walllets img {
+    margin: 0 0.5rem;
+    display: inline;
+    vertical-align: middle;
+}
+
+body.dark .wallet-connect {
+    color: var(--gray-2);
+    background: var(--gray-2);
+}
+
+.anchor-content-box {
+    margin-bottom: 3.5rem;
+}
+
+a.header-anchor {
+    font-size: 0.85em;
+    float: left;
+    margin-left: -0.87em;
+    padding-right: 0.23em;
+    margin-top: 0.125em;
+    opacity: 0;
+}
+
+h1:focus .header-anchor,
+h1:hover .header-anchor,
+h2:focus .header-anchor,
+h2:hover .header-anchor,
+h3:focus .header-anchor,
+h3:hover .header-anchor,
+h4:focus .header-anchor,
+h4:hover .header-anchor,
+h5:focus .header-anchor,
+h5:hover .header-anchor,
+h6:focus .header-anchor,
+h6:hover .header-anchor {
+    opacity: 1;
+}
+
+.error {
+    color: #fd5d5d;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    margin-bottom: 0.5rem;
+}
+
+.form-group .error {
+    font-size: 1.5rem;
+    margin-bottom: 0;
+}
+
+.card {
+    color: var(--gray-2);
+    background: var(--gray-2);
+    transition: 300ms;
+    width: 100%;
+    height: 8rem;
+    border: none;
+    margin: 0;
+    padding: 16px 30px;
+    border-radius: 14px;
+    cursor: pointer;
+    border-bottom: outside 20px solid var(--col-bg);
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.none {
+    display: none;
+}
+
+.text-center {
+    text-align: center;
+}

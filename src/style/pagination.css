@@ -1,0 +1,39 @@
+.pagination-box {
+    margin-top: 6rem;
+    display: flex;
+}
+.pagination-item {
+    display: flex;
+    flex: 1 50%;
+    max-width: 50%;
+}
+
+.pagination-item + .pagination-item {
+    margin-left: 1rem;
+}
+
+.pagination-link {
+    border: 0.0625rem solid #606c76;
+    border-radius: 0.4rem;
+    flex-grow: 1;
+    padding: 1rem;
+    transition: border-color 200ms cubic-bezier(0.08, 0.52, 0.52, 1);
+}
+
+.pagination-link:hover {
+    border-color: #9b4dca;
+    text-decoration: none;
+}
+
+.pagination-sublabel {
+    color: #525860;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.pagination-label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    word-break: break-word;
+}

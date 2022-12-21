@@ -1,0 +1,24 @@
+.footer {
+    padding: 8rem 0 2rem;
+}
+.footer .copyright {
+    padding-right: 6rem;
+}
+.footer .nav {
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.footer .nav .link {
+    display: inline-block;
+    margin-left: 1.2rem;
+    padding: 0;
+}
+.footer .nav .icon {
+    fill: #9b4dca;
+    height: 2rem;
+}
+.footer .nav .icon:hover {
+    fill: #606c76;
+}

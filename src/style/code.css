@@ -1,0 +1,148 @@
+/* PRISM */
+body main code {
+    font-size: 0.8em;
+    border-radius: 2px;
+    color: #671ddf;
+    margin: 0 2px;
+    padding: 3px 5px;
+    white-space: pre-wrap;
+    font-family: 'Fira Code', 'Roboto Mono', Monaco, Consolas, monospace;
+}
+body main code,
+body main pre {
+    background-color: #f8f8f8;
+    font-family: 'Fira Code', 'Roboto Mono', Monaco, Consolas, monospace;
+}
+body main pre {
+    -moz-osx-font-smoothing: initial;
+    -webkit-font-smoothing: initial;
+    line-height: 1.2;
+    margin: 1.2em 0;
+    overflow: auto;
+    padding: 0 1.4rem;
+    position: relative;
+    word-wrap: normal;
+}
+body.dark code {
+    background-color: #232635;
+    color: #a166ff;
+}
+body.dark pre > code {
+    color: #cecece;
+}
+body .token {
+    font-family: 'Fira Code', 'Roboto Mono', Monaco, Consolas, monospace;
+}
+body .token.cdata,
+body .token.comment,
+body .token.doctype,
+body .token.prolog {
+    color: #8e908c;
+}
+body .token.namespace {
+    opacity: 0.7;
+}
+body .token.punctuation {
+    color: #525252;
+}
+body .token.selector {
+    color: #6679cc;
+}
+body .language-css .token.string,
+body .style .token.string,
+body .token.entity,
+body .token.url,
+body .token.tag,
+body .token.placeholder,
+body .token.variable {
+    color: #2944df;
+}
+body .token.attr-value,
+body .token.control,
+body .token.directive,
+body .token.unit,
+body .token.string,
+body .token.boolean,
+body .token.number,
+body .token.atrule,
+body .token.regex,
+body .token.statement,
+body .token.builtin {
+    color: #df1ddf;
+}
+body .token.function,
+body .token.keyword,
+body .token.important,
+body .token.property,
+body .token.attr-name,
+body .token.constant {
+    font-weight: 500;
+    color: #671ddf;
+}
+body.dark .token.function,
+body.dark .token.keyword,
+body.dark .token.important,
+body.dark .token.property,
+body.dark .token.attr-name,
+body.dark .token.constant {
+    font-weight: 500;
+    color: #a166ff;
+}
+body .token.deleted {
+    text-decoration: line-through;
+}
+body .token.inserted {
+    border-bottom: 1px dotted #202746;
+    text-decoration: none;
+}
+body .token.italic {
+    font-style: italic;
+}
+body .token.bold,
+body .token.important {
+    font-weight: 700;
+}
+body .token.entity {
+    cursor: help;
+}
+body main pre > code {
+    -moz-osx-font-smoothing: initial;
+    -webkit-font-smoothing: initial;
+    background-color: #f8f8f8;
+    border-radius: 2px;
+    color: #33333c;
+    display: block;
+    font-family: Roboto Mono, Monaco, Consolas, monospace;
+    line-height: inherit;
+    margin: 0 2px;
+    max-width: inherit;
+    overflow: inherit;
+    padding: 0.5rem 1rem;
+    white-space: inherit;
+    font-size: 0.8em;
+}
+body main code:after,
+body main code:before {
+    letter-spacing: 0.05rem;
+}
+body code .token {
+    -moz-osx-font-smoothing: initial;
+    -webkit-font-smoothing: initial;
+    min-height: 1.5rem;
+    position: relative;
+    left: auto;
+    background-color: transparent !important;
+}
+body pre:after {
+    color: #ccc;
+    content: attr(data-lang);
+    font-size: 0.6em;
+    font-weight: 600;
+    height: 15px;
+    line-height: 15px;
+    padding: 5px 10px 0;
+    position: absolute;
+    right: 0;
+    text-align: right;
+    top: 0;
+}
