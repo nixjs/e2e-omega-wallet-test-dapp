@@ -5,6 +5,7 @@
     --col-fg: var(--col-black);
     --gray-2: #edf2f6;
     --gray-3: #dbe1e6;
+    --border-color: var(--col-black);
     --max-contrast: #000000;
     /* Shadows */
     --shadow-blue-light: 0px 10px 20px rgba(var(--col-blue-rgb), 0.6);
@@ -47,7 +48,7 @@ body.dark {
 * {
     color: var(--col-fg);
     box-sizing: border-box;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 a:hover {

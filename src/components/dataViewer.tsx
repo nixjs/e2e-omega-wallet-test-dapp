@@ -17,12 +17,18 @@ const renderCode = (data: any) => {
 
 const DataViewer = React.memo(({ data }: AppProps): JSX.Element => {
     return (
-        <div>
+        <div style={{ background: '#f8f8f8' }}>
             {(data && (
                 <pre>
-                    <code className="language-javascript">{renderCode(data)}</code>
+                    <code className="language-javascript" style={{ padding: '1em 0' }}>
+                        {renderCode(data)}
+                    </code>
                 </pre>
-            )) || <></>}
+            )) || (
+                <pre>
+                    <code className="language-javascript" style={{ height: '2.5em' }}></code>
+                </pre>
+            )}
         </div>
     )
 })

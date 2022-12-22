@@ -2,13 +2,24 @@ import React from 'react'
 import { useImmer } from 'use-immer'
 import { toast } from 'react-hot-toast'
 import { ContentComponent, DataViewer } from './components'
+import { TransferSuiTransaction, SignableTransaction } from '@mysten/sui.js'
 import './App.css'
+
+export interface Account {
+    index: number
+    name: string
+    address: string
+    derivationPath: string
+    publicKey?: string
+    display: boolean
+}
 
 function App() {
     const [state, setState] = useImmer({
         installed: false,
         walletInfo: null,
         balance: null,
+        balances: null,
         signature: null,
         loading: false,
         account: null,
@@ -16,11 +27,14 @@ function App() {
         network: null,
         networks: null,
         assets: null,
+        transferCoin: null,
+        registerCoin: null,
+        SUISignAndExecuteTransaction: null,
     })
 
     React.useEffect(() => {
         setState((draft) => {
-            draft.installed = window.omega && window.omega.instance.isOmega
+            draft.installed = window.omega && window.omega.isOmega
         })
     }, [])
 
@@ -29,7 +43,7 @@ function App() {
             draft.loading = true
         })
         window.omega &&
-            window.omega.instance
+            window.omega
                 .connect()
                 .then((result: any) => {
                     setState((draft) => {
@@ -43,7 +57,7 @@ function App() {
                         draft.walletInfo = err
                         draft.loading = false
                     })
-                    toast.success('Failed to connect Omega Wallet')
+                    toast.error('Failed to connect Omega Wallet')
                 })
     }
 
@@ -52,7 +66,7 @@ function App() {
             draft.loading = true
         })
         window.omega &&
-            window.omega.instance
+            window.omega
                 .sign('Hello world')
                 .then((result: any) => {
                     setState((draft) => {
@@ -66,7 +80,7 @@ function App() {
                         draft.signature = err
                         draft.loading = false
                     })
-                    toast.success('Failed to sign a message')
+                    toast.error('Failed to sign a message')
                 })
     }
 
@@ -75,7 +89,7 @@ function App() {
             draft.loading = true
         })
         window.omega &&
-            window.omega.instance
+            window.omega
                 .getAccount()
                 .then((result: any) => {
                     setState((draft) => {
@@ -89,7 +103,7 @@ function App() {
                         draft.account = err
                         draft.loading = false
                     })
-                    toast.success('Failed to get a account')
+                    toast.error('Failed to get a account')
                 })
     }
 
@@ -98,7 +112,7 @@ function App() {
             draft.loading = true
         })
         window.omega &&
-            window.omega.instance
+            window.omega
                 .getAccounts()
                 .then((result: any) => {
                     setState((draft) => {
@@ -112,7 +126,7 @@ function App() {
                         draft.accounts = err
                         draft.loading = false
                     })
-                    toast.success('Failed to get accounts')
+                    toast.error('Failed to get accounts')
                 })
     }
 
@@ -121,7 +135,7 @@ function App() {
             draft.loading = true
         })
         window.omega &&
-            window.omega.instance
+            window.omega
                 .getNetwork()
                 .then((result: any) => {
                     setState((draft) => {
@@ -135,7 +149,7 @@ function App() {
                         draft.network = err
                         draft.loading = false
                     })
-                    toast.success('Failed to get a network')
+                    toast.error('Failed to get a network')
                 })
     }
 
@@ -144,7 +158,7 @@ function App() {
             draft.loading = true
         })
         window.omega &&
-            window.omega.instance
+            window.omega
                 .getNetworks()
                 .then((result: any) => {
                     setState((draft) => {
@@ -158,7 +172,7 @@ function App() {
                         draft.networks = err
                         draft.loading = false
                     })
-                    toast.success('Failed to get networks')
+                    toast.error('Failed to get networks')
                 })
     }
 
@@ -167,7 +181,7 @@ function App() {
             draft.loading = true
         })
         window.omega &&
-            window.omega.instance
+            window.omega
                 .getNetworks()
                 .then((result: any) => {
                     setState((draft) => {
@@ -181,7 +195,7 @@ function App() {
                         draft.assets = err
                         draft.loading = false
                     })
-                    toast.success('Failed to get assets')
+                    toast.error('Failed to get assets')
                 })
     }
 
@@ -190,7 +204,7 @@ function App() {
             draft.loading = true
         })
         window.omega &&
-            window.omega.instance
+            window.omega
                 .getBalance()
                 .then((result: any) => {
                     setState((draft) => {
@@ -204,8 +218,121 @@ function App() {
                         draft.balance = err
                         draft.loading = false
                     })
-                    toast.success('Failed to get balance')
+                    toast.error('Failed to get balance')
                 })
+    }
+
+    const onGetBalances = () => {
+        setState((draft) => {
+            draft.loading = true
+        })
+        window.omega &&
+            window.omega
+                .getBalances()
+                .then((result: any) => {
+                    setState((draft) => {
+                        draft.balances = result
+                        draft.loading = false
+                    })
+                    toast.success('Got balances successfully')
+                })
+                .catch((err: any) => {
+                    setState((draft) => {
+                        draft.balances = err
+                        draft.loading = false
+                    })
+                    console.log(err)
+                    toast.error('Failed to get balances')
+                })
+    }
+
+    const onTransferCoin = () => {
+        setState((draft) => {
+            draft.loading = true
+        })
+        window.omega &&
+            window.omega
+                .signTransaction({
+                    kind: 'transfer_coin',
+                    data: {
+                        amount: '1',
+                        assetId: '0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>',
+                        to: '0x8e11ce8e16b3d9701f08df9171a790ebdbca0a78010245427052b012faecc8a7',
+                    },
+                })
+                .then((result: any) => {
+                    setState((draft) => {
+                        draft.transferCoin = result
+                        draft.loading = false
+                    })
+                    toast.success('Transferred successfully')
+                })
+                .catch((err: any) => {
+                    setState((draft) => {
+                        draft.transferCoin = err
+                        draft.loading = false
+                    })
+                    toast.error('Failed to transfer coin')
+                })
+    }
+
+    const onRegisterCoin = () => {
+        setState((draft) => {
+            draft.loading = true
+        })
+        window.omega &&
+            window.omega
+                .signTransaction({
+                    kind: 'register_asset',
+                    data: {
+                        assetId: '0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>',
+                    },
+                })
+                .then((result: any) => {
+                    setState((draft) => {
+                        draft.transferCoin = result
+                        draft.loading = false
+                    })
+                    toast.success('Transferred successfully')
+                })
+                .catch((err: any) => {
+                    setState((draft) => {
+                        draft.transferCoin = err
+                        draft.loading = false
+                    })
+                    toast.error('Failed to transfer coin')
+                })
+    }
+
+    const onSUISignAndExecuteTransaction = async () => {
+        if (state.walletInfo && (state.walletInfo as Account).address) {
+            const data: TransferSuiTransaction = {
+                amount: 1,
+                gasBudget: 100,
+                recipient: '0x1058a41ebe92ff069b65b692e20e51874a431e8b',
+                suiObjectId: '0x4369b5214366d080ff50c0f721a657c3af585807',
+            }
+            window.omega &&
+                window.omega
+                    .signTransaction({
+                        kind: 'transferSui',
+                        data: data,
+                    })
+                    .then((result: any) => {
+                        setState((draft) => {
+                            draft.SUISignAndExecuteTransaction = result
+                            draft.loading = false
+                        })
+                        toast.success('Executed transaction successfully')
+                    })
+                    .catch((err: any) => {
+                        setState((draft) => {
+                            draft.SUISignAndExecuteTransaction = err
+                            draft.loading = false
+                        })
+                        toast.error('Failed to execute transaction')
+                    })
+        }
     }
 
     return (
@@ -271,78 +398,173 @@ function App() {
                         <ContentComponent title="App installed">
                             <DataViewer data={state.installed ? 'Installed' : 'Not yet'} />
                         </ContentComponent>
-                        <ContentComponent title="Connect wallet">
-                            <h4>Request:</h4>
-                            <DataViewer data="window.omega.instance.connect()" />
-                            <button disabled={state.loading || !state.installed} onClick={onConnectWallet}>
-                                Connect wallet
-                            </button>
-                            <h4>Response: </h4>
-                            <DataViewer data={state.walletInfo} />
-                        </ContentComponent>
-                        <ContentComponent title="Sign Message">
-                            <h4>Request:</h4>
-                            <DataViewer data="window.omega.instance.getAccount('Hello world')" />
-                            <button disabled={state.loading || !state.installed} onClick={onSignMessage}>
-                                Sign Message
-                            </button>
-                            <h4>Response: </h4>
-                            <DataViewer data={state.signature} />
-                        </ContentComponent>
-                        <ContentComponent title="Get account">
-                            <h4>Request:</h4>
-                            <DataViewer data="window.omega.instance.getAccount()" />
-                            <button disabled={state.loading || !state.installed} onClick={onGetAccount}>
-                                Get account
-                            </button>
-                            <h4>Response: </h4>
-                            <DataViewer data={state.account} />
-                        </ContentComponent>
-                        <ContentComponent title="Get account">
-                            <h4>Request:</h4>
-                            <DataViewer data="window.omega.instance.getAccounts()" />
-                            <button disabled={state.loading || !state.installed} onClick={onGetAccounts}>
-                                Get accounts
-                            </button>
-                            <h4>Response: </h4>
-                            <DataViewer data={state.accounts} />
-                        </ContentComponent>
-                        <ContentComponent title="Get network">
-                            <h4>Request:</h4>
-                            <DataViewer data="window.omega.instance.getNetwork()" />
-                            <button disabled={state.loading || !state.installed} onClick={onGetNetwork}>
-                                Get network
-                            </button>
-                            <h4>Response: </h4>
-                            <DataViewer data={state.network} />
-                        </ContentComponent>
-                        <ContentComponent title="Get networks">
-                            <h4>Request:</h4>
-                            <DataViewer data="window.omega.instance.getNetworks()" />
-                            <button disabled={state.loading || !state.installed} onClick={onGetNetworks}>
-                                Get networks
-                            </button>
-                            <h4>Response: </h4>
-                            <DataViewer data={state.networks} />
-                        </ContentComponent>
-                        <h4>Request:</h4>
-                        <ContentComponent title="Get assets">
-                            <DataViewer data="window.omega.instance.getAsset()" />
-                            <button disabled={state.loading || !state.installed} onClick={onGetAssets}>
-                                Get assets
-                            </button>
-                            <h4>Response: </h4>
-                            <DataViewer data={state.assets} />
-                        </ContentComponent>
-                        <ContentComponent title="Get balance">
-                            <h4>Request:</h4>
-                            <DataViewer data="window.omega.instance.getBalance()" />
-                            <button disabled={state.loading || !state.installed} onClick={onGetBalance}>
-                                Get balance
-                            </button>
-                            <h4>Response: </h4>
-                            <DataViewer data={state.balance} />
-                        </ContentComponent>
+                        <div className="row">
+                            <div className="column column-50">
+                                <ContentComponent title="Connect wallet">
+                                    <h5>Request:</h5>
+                                    <DataViewer data="window.omega.connect()" />
+                                    <button disabled={state.loading || !state.installed} onClick={onConnectWallet}>
+                                        Connect wallet
+                                    </button>
+                                    <h5>Response: </h5>
+                                    <DataViewer data={state.walletInfo} />
+                                </ContentComponent>
+                            </div>
+                            <div className="column column-50">
+                                <ContentComponent title="Sign Message">
+                                    <h5>Request:</h5>
+                                    <DataViewer data="window.omega.getAccount('Hello world')" />
+                                    <button disabled={state.loading || !state.installed} onClick={onSignMessage}>
+                                        Sign Message
+                                    </button>
+                                    <h5>Response: </h5>
+                                    <DataViewer data={state.signature} />
+                                </ContentComponent>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="column column-50">
+                                <ContentComponent title="Get account">
+                                    <h5>Request:</h5>
+                                    <DataViewer data="window.omega.getAccount()" />
+                                    <button disabled={state.loading || !state.installed} onClick={onGetAccount}>
+                                        Get account
+                                    </button>
+                                    <h5>Response: </h5>
+                                    <DataViewer data={state.account} />
+                                </ContentComponent>
+                                <ContentComponent title="Get network">
+                                    <h5>Request:</h5>
+                                    <DataViewer data="window.omega.getNetwork()" />
+                                    <button disabled={state.loading || !state.installed} onClick={onGetNetwork}>
+                                        Get network
+                                    </button>
+                                    <h5>Response: </h5>
+                                    <DataViewer data={state.network} />
+                                </ContentComponent>
+                            </div>
+                            <div className="column column-50">
+                                <ContentComponent title="Get accounts">
+                                    <h5>Request:</h5>
+                                    <DataViewer data="window.omega.getAccounts()" />
+                                    <button disabled={state.loading || !state.installed} onClick={onGetAccounts}>
+                                        Get accounts
+                                    </button>
+                                    <h5>Response: </h5>
+                                    <DataViewer data={state.accounts} />
+                                </ContentComponent>
+                                <ContentComponent title="Get networks">
+                                    <h5>Request:</h5>
+                                    <DataViewer data="window.omega.getNetworks()" />
+                                    <button disabled={state.loading || !state.installed} onClick={onGetNetworks}>
+                                        Get networks
+                                    </button>
+                                    <h5>Response: </h5>
+                                    <DataViewer data={state.networks} />
+                                </ContentComponent>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="column column-50">
+                                <ContentComponent title="Get assets">
+                                    <h5>Request:</h5>
+                                    <DataViewer data="window.omega.getAsset()" />
+                                    <button disabled={state.loading || !state.installed} onClick={onGetAssets}>
+                                        Get assets
+                                    </button>
+                                    <h5>Response: </h5>
+                                    <DataViewer data={state.assets} />
+                                </ContentComponent>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="column column-50">
+                                <ContentComponent title="Get balance">
+                                    <h5>Request:</h5>
+                                    <DataViewer data="window.omega.getBalance()" />
+                                    <button disabled={state.loading || !state.installed} onClick={onGetBalance}>
+                                        Get balance
+                                    </button>
+                                    <h5>Response: </h5>
+                                    <DataViewer data={state.balance} />
+                                </ContentComponent>
+                            </div>
+                            <div className="column column-50">
+                                <ContentComponent title="Get balance">
+                                    <h5>Request:</h5>
+                                    <DataViewer data="window.omega.getBalances()" />
+                                    <button disabled={state.loading || !state.installed} onClick={onGetBalances}>
+                                        Get balances
+                                    </button>
+                                    <h5>Response: </h5>
+                                    <DataViewer data={state.balances} />
+                                </ContentComponent>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="column column-50">
+                                <ContentComponent title="Send a Transaction">
+                                    <h5>Transfer coin request:</h5>
+                                    <DataViewer
+                                        data="await window.omega.signTransaction({
+    kind: 'transfer_coin',
+    data: {
+        amount: '1',
+        assetId: '0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>',
+        to: '0x8e11ce8e16b3d9701f08df9171a790ebdbca0a78010245427052b012faecc8a7',
+    },
+})"
+                                    />
+                                    <button disabled={state.loading || !state.installed} onClick={onTransferCoin}>
+                                        Transfer coin
+                                    </button>
+                                    <div className="divided-bottom mt-16 mb-16" />
+                                    <h5>Transfer coin response: </h5>
+                                    <DataViewer data={state.transferCoin} />
+                                    <h5>Register coin request:</h5>
+                                    <DataViewer
+                                        data="await window.omega.signTransaction({
+    kind: 'register_asset',
+    data: {
+        assetId: '0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>'
+    },
+})"
+                                    />
+                                    <button disabled={state.loading || !state.installed} onClick={onRegisterCoin}>
+                                        Register coin
+                                    </button>
+                                    <h5>Register coin response: </h5>
+                                    <DataViewer data={state.registerCoin} />
+                                </ContentComponent>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="column column-50">
+                                <ContentComponent title="[SUI] Sign and Execute a transaction">
+                                    <h5>Request:</h5>
+                                    <DataViewer
+                                        data="const data: TransferSuiTransaction = {
+                amount: 1,
+                gasBudget: 100,
+                recipient: '0x1058a41ebe92ff069b65b692e20e51874a431e8b',
+                suiObjectId: '0x42ff19f3bd12855ef2809645ffbfa4b5e75d4de8',
+            }
+            const request: SignableTransaction = {
+                kind: 'transferSui',
+                data
+            }
+             window.omega &&
+                 window.omega._sui_
+                     .signAndExecuteTransaction(request).then(console.log).catch(console.log)"
+                                    />
+                                    <button disabled={state.loading || !state.installed} onClick={onSUISignAndExecuteTransaction}>
+                                        [SUI] Sign and execute a transaction
+                                    </button>
+                                    <h5>Response: </h5>
+                                    <DataViewer data={state.SUISignAndExecuteTransaction} />
+                                </ContentComponent>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
