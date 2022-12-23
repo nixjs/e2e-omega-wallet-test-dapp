@@ -38,7 +38,12 @@ function App() {
         })
     }, [])
 
-    const onConnectWallet = () => {
+    React.useEffect(() => {
+        console.log(12312)
+        onConnectWallet()
+    }, [])
+
+    const onConnectWallet = React.useCallback(() => {
         setState((draft) => {
             draft.loading = true
         })
@@ -59,7 +64,7 @@ function App() {
                     })
                     toast.error('Failed to connect Omega Wallet')
                 })
-    }
+    }, [])
 
     const onSignMessage = () => {
         setState((draft) => {
@@ -315,7 +320,7 @@ function App() {
             window.omega &&
                 window.omega
                     .signTransaction({
-                        kind: 'transferSui',
+                        kind: 'sui_transferSui',
                         data: data,
                     })
                     .then((result: any) => {
@@ -502,7 +507,7 @@ function App() {
                             </div>
                         </div>
                         <div className="row">
-                            <div className="column column-50">
+                            <div className="column column-100">
                                 <ContentComponent title="Send a Transaction">
                                     <h5>Transfer coin request:</h5>
                                     <DataViewer
@@ -535,12 +540,6 @@ function App() {
                                     </button>
                                     <h5>Register coin response: </h5>
                                     <DataViewer data={state.registerCoin} />
-                                </ContentComponent>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="column column-50">
-                                <ContentComponent title="[SUI] Sign and Execute a transaction">
                                     <h5>Request:</h5>
                                     <DataViewer
                                         data="const data: TransferSuiTransaction = {
@@ -550,7 +549,7 @@ function App() {
                 suiObjectId: '0x42ff19f3bd12855ef2809645ffbfa4b5e75d4de8',
             }
             const request: SignableTransaction = {
-                kind: 'transferSui',
+                kind: 'sui_transferSui',
                 data
             }
              window.omega &&

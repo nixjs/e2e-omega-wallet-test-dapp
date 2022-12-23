@@ -15,8 +15,8 @@ import './style/switchbox.css'
 import './style/dropdown.css'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-    <React.StrictMode>
+    <>
         <App />
         <Toaster />
-    </React.StrictMode>
+    </>
 )
