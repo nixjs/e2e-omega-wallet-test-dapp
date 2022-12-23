@@ -39,7 +39,6 @@ function App() {
     }, [])
 
     React.useEffect(() => {
-        console.log(12312)
         onConnectWallet()
     }, [])
 
@@ -187,7 +186,7 @@ function App() {
         })
         window.omega &&
             window.omega
-                .getNetworks()
+                .getAsset()
                 .then((result: any) => {
                     setState((draft) => {
                         draft.assets = result
@@ -246,7 +245,6 @@ function App() {
                         draft.balances = err
                         draft.loading = false
                     })
-                    console.log(err)
                     toast.error('Failed to get balances')
                 })
     }
